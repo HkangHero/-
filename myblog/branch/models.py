@@ -19,7 +19,7 @@ class Teacher(models.Model):
     teacher_work=models.CharField(max_length=10,null=True)#负责实验室/图书馆
     teacher_token=models.CharField(max_length=300)#缓冲token
 class VoluntaryLabor(models.Model):
-    ud=models.AutoField(primary_key=True)
+    ud=models.AutoField(primary_key=True)#编号
     work_id=models.CharField(max_length=12)#学生号
     teacher_id=models.CharField(max_length=12)#老师号
     date=models.CharField(max_length=10) #日期
@@ -29,4 +29,19 @@ class VoluntaryLabor(models.Model):
 class Master(models.Model):
     username=models.CharField(max_length=12,primary_key=True)#账号
     password=models.CharField(max_length=20)#密码
+
+class bill(models.Model):
+    ud=models.AutoField(primary_key=True)#编号
+    title=models.CharField(max_length=20)#标题 /打扫还是干啥 老师自己写
+    demand=models.CharField(max_length=20,default='无要求')#男/女/无要求
+    time=models.CharField(max_length=16) #准确日期
+    work_tepy=models.CharField(max_length=10) #实验室/图书馆
+    work_time=models.CharField(max_length=6)#工作几小时
+    teacher_name=models.CharField(max_length=10)#老师姓名
+    Impatient=models.CharField(max_length=10,default='普')#是否着急
+    photos=models.CharField(max_length=10)#哪栋楼
+    address=models.CharField(max_length=30)#详细地点
+    phone_number=models.CharField(max_length=15)#手机号 联系方式
+    state=models.CharField(max_length=2,default=0)#状态 是否已经满
+    peoples=models.CharField(max_length=10)#需要多少学生
     

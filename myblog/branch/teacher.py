@@ -5,6 +5,9 @@ from branch.views import Password_module
 
 import requests
 from bs4 import BeautifulSoup
+
+#登录成功返回的token是老师的学号
+#登录失败token是erro
 def login(request):
   if  request.method=='POST':
      username=request.POST.get('username')
@@ -49,6 +52,8 @@ def return_id(token):
         return check_token
 
 
+#注意eval()函数 是将前端的的json 序列化
+#返回的是数据库中不存在的学生
 import json
 import time
 def  somework(request):
@@ -75,14 +80,18 @@ def  somework(request):
         a.append(worre)
         return HttpResponse(json.dumps(a))
 
+
 #登录以后先检查是否有工作
 def check_work(request):
     if request.method=='POST':
         token=request.POST.get('token')
         fast=Password_module('0') 
         check_token=fast.checkToken(token) 
-        teacher=models.Teacher.objects.filter(teacher_id=check_token)
-        return HttpResponse(teacher)
+        try:
+           teacher=models.Teacher.objects.filter(teacher_id=check_token)[0].teacher_work
+           return HttpResponse(teacher)
+        except:
+            return HttpResponse('erro')
 
 #如果没有记录工作将写入
 def write_work(request):
