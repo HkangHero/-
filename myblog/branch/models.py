@@ -30,18 +30,27 @@ class Master(models.Model):
     username=models.CharField(max_length=12,primary_key=True)#账号
     password=models.CharField(max_length=20)#密码
 
+
+
+#state =peopl 的时候
 class bill(models.Model):
     ud=models.AutoField(primary_key=True)#编号
     title=models.CharField(max_length=20)#标题 /打扫还是干啥 老师自己写
     demand=models.CharField(max_length=20,default='无要求')#男/女/无要求
-    time=models.CharField(max_length=16) #准确日期
+    time=models.CharField(max_length=35) #准确日期
     work_tepy=models.CharField(max_length=10) #实验室/图书馆
     work_time=models.CharField(max_length=6)#工作几小时
-    teacher_name=models.CharField(max_length=10)#老师姓名
+    teacher_name=models.CharField(max_length=20)#老师姓名
     Impatient=models.CharField(max_length=10,default='普')#是否着急
     photos=models.CharField(max_length=10)#哪栋楼
     address=models.CharField(max_length=30)#详细地点
     phone_number=models.CharField(max_length=15)#手机号 联系方式
-    state=models.CharField(max_length=2,default=0)#状态 是否已经满
-    peoples=models.CharField(max_length=10)#需要多少学生
+    state=models.IntegerField(default=0)#完成一个人 就加一 为的是可以在凌晨之前删除订单
+    number_peoplr=models.IntegerField(default=0)# 报名人数
+    peoples=models.IntegerField() #需要多少学生
+    
+class Cash(models.Model):
+    ud=models.AutoField(primary_key=True)
+    cid=models.CharField(max_length=5)#bill的ud
+    student_id=models.CharField(max_length=16)#学号的id
     

@@ -1,6 +1,6 @@
 from django.shortcuts import render,HttpResponse
 from branch import models
-from branch.models import Students,Teacher,Master,VoluntaryLabor
+from branch.models import Students,Teacher,Master,VoluntaryLabor,bill,Cash
 from branch.views import Password_module
 
 import requests
@@ -59,7 +59,8 @@ import time
 def  somework(request):
     if request.method=='POST':
         token=request.POST.get('token')
-        content=request.POST.get('content')
+        content=request.POST.get('content')#学生的学号 做义工的时间
+        numb=request.POST.get('id')#bill的ud
         contents=eval(content)
         teacher=return_id(token)
         if teacher == 'error':
@@ -75,6 +76,16 @@ def  somework(request):
             students=models.Students.objects.filter(student_id=student)
             if students.exists():#如果学号存在就写入
                models.VoluntaryLabor.objects.create(work_id=student,time=Time,addres=teacher_work,teacher_id=teacher,date=day)
+               #bill中的state值如果等于people 那么就可以直接删除
+               g=models.bill.objects.filter(ud=numb)
+               num=g.state+1
+               g.update(state=num)
+               g=models.bill.objects.filter(ud=numb)[0]
+               #条件符合 将删除Cash 表中的数据 
+               #当老师将接任务所有学生全部提交以后 将删除学生自己的任务表中的数据
+               if g.state == g.peoples:#报名的人全部已经完成义工了
+                  models.Cash.objects.filter(cid=numb,student_id=student).delete()
+                  
             else:#不存在说明该学生没有登录过
                 worre={student}
         a.append(worre)
