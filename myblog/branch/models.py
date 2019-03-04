@@ -53,4 +53,5 @@ class Cash(models.Model):
     ud=models.AutoField(primary_key=True)
     cid=models.CharField(max_length=5)#bill的ud
     student_id=models.CharField(max_length=16)#学号的id
+    pass_time=models.CharField(max_length=20,default=None)#时间 方便删除
     

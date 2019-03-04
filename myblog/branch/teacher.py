@@ -54,6 +54,7 @@ def return_id(token):
 
 #注意eval()函数 是将前端的的json 序列化
 #返回的是数据库中不存在的学生
+#老师给做义工的学生进行签到
 import json
 import time
 def  somework(request):
@@ -75,17 +76,19 @@ def  somework(request):
             Time=i['time']
             students=models.Students.objects.filter(student_id=student)
             if students.exists():#如果学号存在就写入
+               #如果学号存在就创建出做过义工的数据库
+               #删除Cash 个人正在执行的记录
+               #在判读报名人数是否与签到人数相等 如果过相等就删除bill 中的记录
                models.VoluntaryLabor.objects.create(work_id=student,time=Time,addres=teacher_work,teacher_id=teacher,date=day)
-               #bill中的state值如果等于people 那么就可以直接删除
+               #删除个人的正在执行任务的记录
+               models.Cash.objects.filter(cid=numb,student_id=student).delete()
                g=models.bill.objects.filter(ud=numb)
                num=g.state+1
                g.update(state=num)
-               g=models.bill.objects.filter(ud=numb)[0]
-               #条件符合 将删除Cash 表中的数据 
-               #当老师将接任务所有学生全部提交以后 将删除学生自己的任务表中的数据
                if g.state == g.peoples:#报名的人全部已经完成义工了
-                  models.Cash.objects.filter(cid=numb,student_id=student).delete()
-                  
+                  models.bill.objects.filter(ud=numb).delete()
+               else:
+                  pass            
             else:#不存在说明该学生没有登录过
                 worre={student}
         a.append(worre)
